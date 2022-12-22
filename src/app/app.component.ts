@@ -68,7 +68,7 @@ export class AppComponent implements OnInit {
     this.getNews();
   }
 
-  getNews(): void {
+  getNews(): void {/*
     const headers = new HttpHeaders();
     headers.set('Access-Control-Allow-Origin', '*')
     headers.set('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
@@ -89,7 +89,7 @@ export class AppComponent implements OnInit {
           this.maxArticles = +data.totalResults;
           this.items = data.articles;
         }
-      });
+      });*/
 
     this.getData().subscribe({
       error: (error) => { console.error(error) },
@@ -110,7 +110,7 @@ export class AppComponent implements OnInit {
             'Content-Type': 'application/json',
           },
           method: 'GET', // GET, POST, PUT, DELETE
-          mode: 'no-cors' // the most important option
+          mode: 'cors' // the most important option
         }
       ));
   }
