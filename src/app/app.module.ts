@@ -11,13 +11,11 @@ import { LoaderService } from './service/loader.service';
 import { LoaderInterceptor } from './interceptor/loader.interceptor';
 
 import { AppComponent } from './app.component';
-import { TestComponent } from './component/test/test/test.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoaderComponent,
-    TestComponent
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
