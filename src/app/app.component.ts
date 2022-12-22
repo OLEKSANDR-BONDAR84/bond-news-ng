@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { from, Observable } from 'rxjs';
 
 export interface Source {
   id: string;
@@ -83,12 +84,35 @@ export class AppComponent implements OnInit {
       })
       .subscribe({
         error: (error) => { console.error(error) },
-        complete: () => console.log(""),
+        complete: () => console.log("success 1!"),
         next: (data: any) => {
           this.maxArticles = +data.totalResults;
           this.items = data.articles;
         }
       });
+
+    this.getData().subscribe({
+      error: (error) => { console.error(error) },
+      complete: () => console.log("success 2!"),
+      next: (data: any) => {
+        this.maxArticles = +data.totalResults;
+        this.items = data.articles;
+      }
+    });
+  }
+
+  getData(): Observable<any> {
+    return from(
+      fetch(
+        'https://newsapi.org/v2/top-headlines?country=pl&apiKey=2b0d53a3d6b74c5dbdcda7cdf7b190bf&pageSize=1&category=General', // the url you are trying to access
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'GET', // GET, POST, PUT, DELETE
+          mode: 'no-cors' // the most important option
+        }
+      ));
   }
 
   geNextNews(): void {
