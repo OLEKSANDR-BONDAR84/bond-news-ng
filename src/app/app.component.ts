@@ -110,7 +110,7 @@ export class AppComponent implements OnInit {
             'Content-Type': 'application/json',
           },
           method: 'GET', // GET, POST, PUT, DELETE
-          mode: 'cors' // the most important option
+          mode: 'no-cors' // the most important option
         }
       ));
   }
