@@ -42,6 +42,11 @@ export class AppSettings {
                                   { item_id: 7, item_text: 'Technology' }]
 }
 
+const expess = require("express")
+const app = expess()
+var request = require("request")
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -57,7 +62,7 @@ export class AppComponent implements OnInit {
   dropdownCategoryList = {} as any;
   dropdownSourcesList = {} as any;
   items = new Array<Article>();
-
+  
   constructor(private httpClient: HttpClient) {}
 
   ngOnInit() {
@@ -68,8 +73,19 @@ export class AppComponent implements OnInit {
   }
 
   getNews(): void {
+    app.get("/", () => request("https://newsapi.org/v2/top-headlines?country=pl&apiKey=2b0d53a3d6b74c5dbdcda7cdf7b190bf&pageSize=1&category=General", 
+      function(error, response, body) {
+        if (!error && response.statusCode == 200) {
+          this.maxArticles = +body.totalResults;
+          this.items = body.articles;
+        }
+      }))
+
     this.httpClient.get(AppSettings.API_HOST_PROD + this.source,
-        {params: {country: this.currCountry, apiKey: '2b0d53a3d6b74c5dbdcda7cdf7b190bf', pageSize: String(this.currPageSize), category: this.currCategory}})
+        {params: {country: this.currCountry, 
+          apiKey: '2b0d53a3d6b74c5dbdcda7cdf7b190bf', 
+          pageSize: String(this.currPageSize), 
+          category: this.currCategory}, headers:{}})
           .subscribe((data: any) => {
             this.maxArticles = +data.totalResults;
             this.items = data.articles;
