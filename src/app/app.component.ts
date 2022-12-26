@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { from, Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 
 export interface Source {
   id: string;
@@ -24,10 +23,9 @@ export interface Article {
 }
 
 export class AppSettings {
-  public static API_HOST_PROD = 'https://newsapi.org/v2/';
 
-  public static SOURCE_LIST = [{ item_id: 1, item_text: 'top', item_code: 'top-headlines?' },
-  { item_id: 2, item_text: 'all', item_code: 'everything?' }];
+  public static SOURCE_LIST = [{ item_id: 1, item_text: 'top', item_code: '/top-headlines?' },
+  { item_id: 2, item_text: 'all', item_code: '/everything?' }];
 
   public static COUNTRY_LIST = [{ item_id: 1, item_text: 'Poland', item_code: 'pl' },
   { item_id: 2, item_text: 'Ukraine', item_code: 'ua' },
@@ -68,51 +66,23 @@ export class AppComponent implements OnInit {
     this.getNews();
   }
 
-  getNews(): void {/*
-    const headers = new HttpHeaders();
-    headers.set('Access-Control-Allow-Origin', '*')
-    headers.set('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    headers.set('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
-    this.httpClient.get(AppSettings.API_HOST_PROD + this.source,
+  getNews(): void {
+    var headers: string = 'https://newsapi.org/v2' +
+      this.source + 'country=' + this.currCountry + '&apiKey=' + '2b0d53a3d6b74c5dbdcda7cdf7b190bf' + '&pageSize=' + this.currPageSize +
+      '&category=' + this.currCategory;
+
+    this.httpClient.get("https://bond-cors-proxy.herokuapp.com/v1",
       {
-        params: {
-          country: this.currCountry,
-          apiKey: '2b0d53a3d6b74c5dbdcda7cdf7b190bf',
-          pageSize: String(this.currPageSize),
-          category: this.currCategory
-        }, headers: headers
+        headers: new HttpHeaders({ url: headers })
       })
       .subscribe({
-        error: (error) => { console.error(error) },
-        complete: () => console.log("success 1!"),
+        error: (error) => console.error(error),
+        complete: () => console.log("success!"),
         next: (data: any) => {
           this.maxArticles = +data.totalResults;
           this.items = data.articles;
         }
-      });*/
-
-    this.getData().subscribe({
-      error: (error) => { console.error(error) },
-      complete: () => console.log("success 2!"),
-      next: (data: any) => {
-        this.maxArticles = +data.totalResults;
-        this.items = data.articles;
-      }
-    });
-  }
-
-  getData(): Observable<any> {
-    return from(
-      fetch(
-        'https://newsapi.org/v2/top-headlines?country=pl&apiKey=2b0d53a3d6b74c5dbdcda7cdf7b190bf&pageSize=1&category=General', // the url you are trying to access
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: 'GET', // GET, POST, PUT, DELETE
-          mode: 'no-cors' // the most important option
-        }
-      ));
+      });
   }
 
   geNextNews(): void {
