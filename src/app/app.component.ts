@@ -56,6 +56,7 @@ export class AppComponent implements OnInit {
   dropdownCategoryList = {} as any;
   dropdownSourcesList = {} as any;
   items = new Array<Article>();
+  errorMsg: string = "";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -67,20 +68,19 @@ export class AppComponent implements OnInit {
   }
 
   getNews(): void {
-    var headers: string = 'https://newsapi.org/v2' +
-      this.source + 'country=' + this.currCountry + '&apiKey=' + '2b0d53a3d6b74c5dbdcda7cdf7b190bf' + '&pageSize=' + this.currPageSize +
-      '&category=' + this.currCategory;
+    var headers: string = 'https://newsapi.org/v2' + this.source + 'country=' + this.currCountry +
+      '&apiKey=' + '2b0d53a3d6b74c5dbdcda7cdf7b190bf' + '&pageSize=' + this.currPageSize + '&category=' + this.currCategory;
 
     this.httpClient.get("https://bond-cors-proxy.herokuapp.com/v1",
       {
         headers: new HttpHeaders({ url: headers })
       })
       .subscribe({
-        error: (error) => console.error(error),
+        error: (error: HttpErrorResponse) => { this.errorMsg = error.message; console.error(error.message) },
         complete: () => console.log("success!"),
         next: (data: any) => {
-          this.maxArticles = +data.totalResults;
-          this.items = data.articles;
+          this.maxArticles = data ? +data.totalResults : 0;
+          this.items = data ? data.articles : [];
         }
       });
   }
