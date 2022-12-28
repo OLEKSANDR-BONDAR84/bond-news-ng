@@ -76,11 +76,12 @@ export class AppComponent implements OnInit {
         headers: new HttpHeaders({ url: headers })
       })
       .subscribe({
-        error: (error: HttpErrorResponse) => { this.errorMsg = error.message; console.error(error.message) },
+        error: (error: HttpErrorResponse) => { this.errorMsg = error.statusText; console.error(error) },
         complete: () => console.log("success!"),
         next: (data: any) => {
           this.maxArticles = data ? +data.totalResults : 0;
           this.items = data ? data.articles : [];
+          this.errorMsg = data ? "ok" !== data.status ? data.message : "" : "";
         }
       });
   }
