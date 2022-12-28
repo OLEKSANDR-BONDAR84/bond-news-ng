@@ -69,7 +69,7 @@ export class AppComponent implements OnInit {
 
   getNews(): void {
     var headers: string = 'https://newsapi.org/v2' + this.source + 'country=' + this.currCountry +
-      '&apiKey=' + '2b0d53a3d6b74c5dbdcda7cdf7b190bf' + '&pageSize=' + this.currPageSize + '&category=' + this.currCategory;
+      '&apiKey=' + '2b0d53a3d6b74c5dbdcda7cdf7b190bf' + (this.currPageSize < 0 ? '' : '&pageSize=' + this.currPageSize) + '&category=' + this.currCategory;
 
     this.httpClient.get("https://bond-cors-proxy.herokuapp.com/v1",
       {
@@ -79,13 +79,22 @@ export class AppComponent implements OnInit {
         error: (error: HttpErrorResponse) => { this.errorMsg = error.statusText; console.error(error) },
         complete: () => console.log("success!"),
         next: (data: any) => {
-          this.maxArticles = data ? +data.totalResults : 0;
-          this.items = data ? data.articles : [];
+          this.maxArticles = data ? +data.totalResults : this.maxArticles;
+          this.items = data ? data.articles : this.items;
+          this.currPageSize = this.currPageSize < 0 ? this.maxArticles : this.currPageSize;
         }
       });
   }
 
   geNextNews(): void {
+    if (Number(this.currPageSize) < this.maxArticles) {
+      this.currPageSize++;
+      this.getNews();
+    }
+  }
+
+  showAll(): void {
+    this.currPageSize = -2;
     if (Number(this.currPageSize) < this.maxArticles) {
       this.currPageSize++;
       this.getNews();

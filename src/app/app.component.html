@@ -105,6 +105,9 @@ and is wrapped around the whole page content, except for the footer in this exam
       <!-- Blog entries -->
       <div class="w3-col l8 s12" *ngIf="errorMsg == ''">
         <!-- Blog entry -->
+        <button type="button" class="w3-button w3-black w3-black w3-padding-large w3-margin-bottom"
+          style="position: relative; left: 50%" (click)="showAll()">showAll {{this.maxArticles}}»
+        </button>
 
         <div *ngFor="let item of items">
           <div class="w3-card-4 w3-margin w3-white">
@@ -133,7 +136,8 @@ and is wrapped around the whole page content, except for the footer in this exam
         </div>
         <!-- END BLOG ENTRIES -->
         <button type="button" class="w3-button w3-black w3-black w3-padding-large w3-margin-bottom"
-          style="position: relative; left: 50%" (click)="geNextNews()">Next »</button>
+          style="position: relative; left: 50%" (click)="geNextNews()">Next »
+        </button>
       </div>
 
       <!-- END GRID -->
