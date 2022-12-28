@@ -81,7 +81,6 @@ export class AppComponent implements OnInit {
         next: (data: any) => {
           this.maxArticles = data ? +data.totalResults : 0;
           this.items = data ? data.articles : [];
-          this.errorMsg = data ? "ok" !== data.status ? data.message : "" : "";
         }
       });
   }
