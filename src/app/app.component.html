@@ -106,7 +106,7 @@ and is wrapped around the whole page content, except for the footer in this exam
       <div class="w3-col l8 s12" *ngIf="errorMsg == ''">
         <!-- Blog entry -->
         <button type="button" class="w3-button w3-black w3-black w3-padding-large w3-margin-bottom"
-          style="position: relative; left: 50%" (click)="showAll()">showAll {{this.maxArticles}}»
+          style="position: relative; left: 50%" (click)="showAll()" [disabled]="(this.currPageSize >= maxArticles)">showAll {{this.maxArticles}}»
         </button>
 
         <div *ngFor="let item of items">
@@ -136,7 +136,7 @@ and is wrapped around the whole page content, except for the footer in this exam
         </div>
         <!-- END BLOG ENTRIES -->
         <button type="button" class="w3-button w3-black w3-black w3-padding-large w3-margin-bottom"
-          style="position: relative; left: 50%" (click)="geNextNews()">Next »
+          style="position: relative; left: 50%" (click)="geNextNews()" [disabled]="(this.currPageSize >= maxArticles)">Next »
         </button>
       </div>
 
