@@ -68,8 +68,8 @@ export class AppComponent implements OnInit {
   }
 
   getNews(): void {
-    var headers: string = 'https://newsapi.org/v2' + this.source + 'country=' + this.currCountry +
-      '&apiKey=' + '2b0d53a3d6b74c5dbdcda7cdf7b190bf' + (this.currPageSize < 0 ? '' : '&pageSize=' + this.currPageSize) + '&category=' + this.currCategory;
+    let headers: string = 'https://newsapi.org/v2' + this.source + 'country=' + this.currCountry + '&apiKey=' + '2b0d53a3d6b74c5dbdcda7cdf7b190bf' +
+      (this.currPageSize < 0 ? '' : '&pageSize=' + this.currPageSize) + '&category=' + this.currCategory;
 
     this.httpClient.get("https://bond-cors-proxy.herokuapp.com/v1",
       {
@@ -82,6 +82,10 @@ export class AppComponent implements OnInit {
           this.maxArticles = data ? +data.totalResults : this.maxArticles;
           this.items = data ? data.articles : this.items;
           this.currPageSize = this.currPageSize < 0 ? this.maxArticles : this.currPageSize;
+          this.items.forEach(function (q) {
+            let rangeDate = (new Date(q.publishedAt)).getDate() - (new Date()).getDate();
+            q.publishedAt = rangeDate > 0 ? rangeDate + " day" : "Today";
+          });
         }
       });
   }
