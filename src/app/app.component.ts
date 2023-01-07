@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpXhrBackend } from "@angular/common/http";
+import { Environment } from './environments/environment';
 
 export interface Source {
   id: string;
@@ -29,7 +30,7 @@ export class AppSettings {
 
   public static COUNTRY_LIST = [{ item_id: 1, item_text: 'Poland', item_code: 'pl' },
   { item_id: 2, item_text: 'Ukraine', item_code: 'ua' },
-  { item_id: 3, item_text: '??????', item_code: 'ru' },
+  { item_id: 3, item_text: '?????', item_code: 'ru' },
   { item_id: 4, item_text: 'USA', item_code: 'us' }];
 
   public static CATEGORY_LIST = [{ item_id: 1, item_text: 'General' },
@@ -58,8 +59,6 @@ export class AppComponent implements OnInit {
   items = new Array<Article>();
   errorMsg: string = "";
 
-  constructor(private httpClient: HttpClient) { }
-
   ngOnInit() {
     this.dropdownSourcesList = AppSettings.SOURCE_LIST;
     this.dropdownCountryList = AppSettings.COUNTRY_LIST;
@@ -68,10 +67,11 @@ export class AppComponent implements OnInit {
   }
 
   getNews(): void {
-    let headers: string = 'https://newsapi.org/v2' + this.source + 'country=' + this.currCountry + '&apiKey=' + '2b0d53a3d6b74c5dbdcda7cdf7b190bf' +
+    let httpClient = new HttpClient(new HttpXhrBackend({ build: () => new XMLHttpRequest() }));
+    let headers: string = 'https://newsapi.org/v2' + this.source + 'country=' + this.currCountry + '&apiKey=' + Environment.API_KEY +
       (this.currPageSize < 0 ? '' : '&pageSize=' + this.currPageSize) + '&category=' + this.currCategory;
 
-    this.httpClient.get("https://bond-cors-proxy.herokuapp.com/v1",
+    httpClient.get("https://bond-cors-proxy.herokuapp.com/v1",
       {
         headers: new HttpHeaders({ url: headers })
       })
@@ -83,8 +83,8 @@ export class AppComponent implements OnInit {
           this.items = data ? data.articles : this.items;
           this.currPageSize = this.currPageSize < 0 ? this.maxArticles : this.currPageSize;
           this.items.forEach(function (q) {
-            let rangeDate = (new Date(q.publishedAt)).getDate() - (new Date()).getDate();
-            q.publishedAt = rangeDate > 0 ? rangeDate + " day" : "Today";
+            let rangeDate = (new Date()).getDate() - (new Date(q.publishedAt)).getDate();
+            q.publishedAt = rangeDate > 0 ? rangeDate + " Day" : "Today";
           });
         }
       });
@@ -115,11 +115,5 @@ export class AppComponent implements OnInit {
     this.currCategory = category;
     this.currPageSize = 1;
     this.getNews();
-  }
-
-  onSelectSource(source: string): void {
-    this.source = source;
-    this.dropdownCountryList = AppSettings.COUNTRY_LIST;
-    this.dropdownCategoryList = AppSettings.CATEGORY_LIST;
   }
 }

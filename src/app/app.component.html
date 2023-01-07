@@ -35,64 +35,32 @@ and is wrapped around the whole page content, except for the footer in this exam
       <div class="w3-col l4">
 
         <!-- Posts -->
+        <!-- Labels / Countries -->
         <div class="w3-card w3-margin">
           <div class="w3-container w3-padding">
-            <h4>Filter</h4>
-          </div>
-          <ul class="w3-ul w3-hoverable w3-white">
-            <li class="w3-padding-16">
-              <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i
-                  class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> Source</button>
-              <div id="Demo1" class="w3-hide w3-container">
-                <mat-select placeholder="{{dropdownSourcesList[0].item_text}}"
-                  (selectionChange)="onSelectSource($event.value)">
-                  <mat-option *ngFor="let source of dropdownSourcesList" [value]="source.item_code">
-                    {{source.item_text}}
-                  </mat-option>
-                </mat-select>
-              </div>
-            </li>
-            <li class="w3-padding-16">
-              <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i
-                  class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> Country</button>
-              <div id="Demo2" class="w3-hide w3-container">
-                <mat-select placeholder="{{dropdownCountryList[0].item_text}}"
-                  (selectionChange)="onSelectCountry($event.value)">
-                  <mat-option *ngFor="let country of dropdownCountryList" [value]="country.item_code">
-                    {{country.item_text}}
-                  </mat-option>
-                </mat-select>
-              </div>
-            </li>
-            <li class="w3-padding-16">
-              <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i
-                  class="fa fa-users fa-fw w3-margin-right"></i> Category</button>
-              <div id="Demo3" class="w3-hide w3-container">
-                <mat-select placeholder="{{dropdownCategoryList[0].item_text}}"
-                  (selectionChange)="onSelectCategory($event.value)">
-                  <mat-option *ngFor="let category of dropdownCategoryList" [value]="category.item_text">
-                    {{category.item_text}}
-                  </mat-option>
-                </mat-select>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <hr>
-
-        <!-- Labels / tags -->
-        <div class="w3-card w3-margin">
-          <div class="w3-container w3-padding">
-            <h4>Tags</h4>
+            <h4>Countries</h4>
           </div>
           <div class="w3-container w3-white">
-            <p><span class="w3-tag w3-black w3-margin-bottom">General</span>
-              <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Entertainment</span>
-              <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Business</span>
-              <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Health</span>
-              <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Science</span>
-              <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Sports</span>
-              <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Technology</span>
+            <p>
+              <a [ngClass]="{'w3-tag w3-black w3-small w3-margin-bottom':country.item_code===currCountry, 
+              'w3-tag w3-light-grey w3-small w3-margin-bottom':country.item_code!==currCountry}"
+                *ngFor="let country of dropdownCountryList"
+                (click)="onSelectCountry(country.item_code)">{{country.item_text}}</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Labels / Categories -->
+        <div class="w3-card w3-margin">
+          <div class="w3-container w3-padding">
+            <h4>Categories</h4>
+          </div>
+          <div class="w3-container w3-white">
+            <p>
+              <a [ngClass]="{'w3-tag w3-black w3-small w3-margin-bottom':category.item_text===currCategory, 
+                'w3-tag w3-light-grey w3-small w3-margin-bottom':category.item_text!==currCategory}"
+                *ngFor="let category of dropdownCategoryList"
+                (click)="onSelectCategory(category.item_text)">{{category.item_text}}</a>
             </p>
           </div>
         </div>
