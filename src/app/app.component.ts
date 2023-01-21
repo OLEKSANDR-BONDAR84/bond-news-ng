@@ -71,7 +71,7 @@ export class AppComponent implements OnInit {
     let headers: string = 'https://newsapi.org/v2' + this.source + 'country=' + this.currCountry + '&apiKey=' + Environment.API_KEY +
       (this.currPageSize < 0 ? '' : '&pageSize=' + this.currPageSize) + '&category=' + this.currCategory;
 
-    httpClient.get("https://bond-cors-proxy.herokuapp.com/v1",
+    httpClient.get("https://bond-cors-proxy.up.railway.app/v1",
       {
         headers: new HttpHeaders({ url: headers })
       })
