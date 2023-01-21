@@ -68,7 +68,7 @@ export class AppComponent implements OnInit {
 
   getNews(): void {
     let httpClient = new HttpClient(new HttpXhrBackend({ build: () => new XMLHttpRequest() }));
-    let headers: string = 'https://newsapi.org/v2' + this.source + 'country=' + this.currCountry + '&apiKey=' + Environment.API_KEY +
+    let headers: string = 'https://newsapi.org/v2' + this.source + 'country=' + this.currCountry + '&apiKey=' + Environment.API_KEY.id +
       (this.currPageSize < 0 ? '' : '&pageSize=' + this.currPageSize) + '&category=' + this.currCategory;
 
     httpClient.get("https://bond-cors-proxy.up.railway.app/v1",
